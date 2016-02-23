@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
     tools:context="com.delixi.price.MainActivity">
 
     <ImageView
@@ -24,15 +26,13 @@
         android:hint="物料描述" />
 
     <Button
+        android:id="@+id/btn_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="搜索"
-        android:id="@+id/btn_search"
-        />
+        android:text="搜索" />
 
     <ListView
         android:id="@+id/search_result_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" />
 </LinearLayout>
