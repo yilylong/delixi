@@ -4,11 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="5dp"
+    android:background="#55efefef"
     tools:context="com.delixi.price.MainActivity">
 
     <ImageView
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/topbar_logo" />
@@ -17,22 +20,33 @@
         android:id="@+id/material_num"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="物料号" />
+        android:background="@drawable/search_bg"
+        android:hint="物料号"
+        android:layout_marginBottom="5dp"
+        android:imeOptions="actionSearch" />
 
     <EditText
         android:id="@+id/material_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="物料描述" />
+        android:background="@drawable/search_bg"
+        android:hint="物料描述"
+        android:layout_marginBottom="5dp"
+        android:imeOptions="actionSearch" />
 
     <Button
         android:id="@+id/btn_search"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="38dp"
+        android:textColor="@color/color_white"
+        android:background="@drawable/btn_search_selector"
         android:text="搜索" />
 
     <ListView
+        android:layout_marginTop="5dp"
         android:id="@+id/search_result_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:divider="@color/color_transparent"
+        android:dividerHeight="10dp" />
 </LinearLayout>

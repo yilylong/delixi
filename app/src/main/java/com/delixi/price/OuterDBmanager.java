@@ -10,13 +10,15 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class OuterDBmanager {
 	private static final String TAG="OuterDBmanager";
 	private static final String PAGENAME="com.delixi.price";
 	private static final String DBPATH ="/data"+Environment.getDataDirectory().getAbsolutePath()+"/"+PAGENAME+"/";
 	private static final String DBNAME="delixi.db";
-	public static final String OUT_DBPATH=Environment.getExternalStorageDirectory()+"delixi/delixi.db";
+	public static final String OUT_DBPATH=Environment.getExternalStorageDirectory()+"/delixi/delixi.db";
+	public static final String OUT_DIR=Environment.getExternalStorageDirectory()+"/delixi";
 
 	private Context mContext;
 	private static SQLiteDatabase mDataBase;
@@ -136,84 +138,59 @@ public class OuterDBmanager {
 			mDataBase.close();
 		}
 	}
-	
+
 	/**
-	 * 通过一个汉字查找对应的五笔编码（只支持单字查找不支持词组或句子）
+	 * 通过物料号查找电器配件详情
 	 * @param context
-	 * @param word
+	 * @param MaterarialNum
+	 * @param desc
 	 * @return
 	 */
-	public static String findWBBMbyHanzi(Context context,String word){
-		if(word==null||word.trim().length()==0||word.trim().length()>1){
+	public static ArrayList<ElectricParts> findElectricParts(Context context,String MaterarialNum,String desc){
+		if((MaterarialNum==null||MaterarialNum.trim().length()==0)&&(desc==null||desc.trim().length()==0)){
 			return null;
 		}
-//		if(!isGbk(word)){
-//			return null;
-//		}
+		StringBuilder arguments = new StringBuilder();
+		if(!StringUtils.isEmpty(MaterarialNum)){
+			arguments.append(" material_num LIKE '%"+MaterarialNum+"%' ");
+		}else{
+			arguments.append(" 1=1 ");
+		}
+		if(!StringUtils.isEmpty(desc)){
+			arguments.append(" and description LIKE '%"+desc+"%' ");
+		}
+
+		ArrayList<ElectricParts> result = null;
 		SQLiteDatabase db = null;
 		String bm = null;
 		try {
+			result = new ArrayList<ElectricParts>();
 			db = openDB(context);
-			String sql = " SELECT bm FROM Wbbm WHERE hanzi=? ;";
-			Cursor cursor = db.rawQuery(sql,  new String[]{word});
+			String sql = " SELECT * FROM t_price WHERE "+arguments.toString()+";";
+			Cursor cursor = db.rawQuery(sql,null);
 			while(cursor.moveToNext()){
-				bm = cursor.getString(cursor.getColumnIndex("bm"));
+				ElectricParts parts = new ElectricParts();
+				parts.setMaterial_num(cursor.getString(cursor.getColumnIndex("material_num")));
+				parts.setDescription(cursor.getString(cursor.getColumnIndex("description")));
+				parts.setTax_price(cursor.getFloat(cursor.getColumnIndex("tax_price")));
+				parts.setPcs(cursor.getFloat(cursor.getColumnIndex("pcs")));
+				parts.setStock_properties(cursor.getString(cursor.getColumnIndex("stock_properties")));
+				parts.setPrimary_price(cursor.getFloat(cursor.getColumnIndex("primary_price")));
+				parts.setAdjust_price(cursor.getFloat(cursor.getColumnIndex("adjust_price")));
+				result.add(parts);
 			}
 			cursor.close();
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}finally{
 			if(db!=null&&db.isOpen()){
 				db.close();	
 			}
 		}
-		return bm;
+		return result;
 	}
 	
-	/**
-	 * 将汉字转为五笔编码（只支持单字查找不支持词组或句子）
-	 * @param context
-	 * @param word
-	 * @return
-	 */
-	public static String hanziToWBBM(Context context,String word){
-		if(word==null||word.trim().length()==0){
-			return null;
-		}
-//		if(!isGbk(word)){
-//			return null;
-//		}
-		String keyword = word;
-		if(word.length()>1){
-			keyword = word.substring(0, 1);
-		}
-		return findWBBMbyHanzi(context,keyword);
-	}
+
 	
-	/**
-	 * 是否是汉字
-	 * @param str
-	 * @return
-	 */
-	public static boolean isGbk(String str){  
-		if(str==null||str.isEmpty()){
-			return false;
-		}
-		char[] chars = str.toCharArray();
-		boolean isGB2312 = false;
-		for (int i = 0; i < chars.length; i++) {
-			byte[] bytes = ("" + chars[i]).getBytes();
-			if (bytes.length == 2) {
-				int[] ints = new int[2];
-				ints[0] = bytes[0] & 0xff;
-				ints[1] = bytes[1] & 0xff;
-				if (ints[0] >= 0x81 && ints[0] <= 0xFE && ints[1] >= 0x40
-						&& ints[1] <= 0xFE) {
-					isGB2312 = true;
-					break;
-				}
-			}
-		}
-		return isGB2312;
-	}
+
 }
