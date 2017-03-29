@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -69,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         listView = (ListView) findViewById(R.id.search_result_list);
         button = (Button) findViewById(R.id.btn_search);
         materialNum = (EditText) findViewById(R.id.material_num);
