@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
             protected void onPostExecute(Boolean aBoolean) {
                 progressDialog.dismiss();
                 if (!aBoolean) {
-                    Toast.makeText(MainActivity.this, "请将数据库文件到" + OuterDBmanager.OUT_DIR + "后再重试导入数据", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "请将数据库文件到" + OuterDBmanager.OUT_DIR + "后再重试导入数据", Toast.LENGTH_LONG).show();
                 }
             }
         }.execute();
