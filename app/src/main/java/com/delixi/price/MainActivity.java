@@ -1,5 +1,7 @@
 package com.delixi.price;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -18,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +31,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
+    private LinearLayout layoutSearchBar;
     private Button button;
     private EditText materialNum, desc;
     private ArrayList<ElectricParts> resultsList = new ArrayList<ElectricParts>();
@@ -72,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        layoutSearchBar = (LinearLayout) findViewById(R.id.layout_search_bar);
+        layoutSearchBar.setVisibility(View.INVISIBLE);
+        hideSearchBar(layoutSearchBar,1);
         listView = (ListView) findViewById(R.id.search_result_list);
         button = (Button) findViewById(R.id.btn_search);
         materialNum = (EditText) findViewById(R.id.material_num);
@@ -136,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(Boolean aBoolean) {
+                hideSearchBar(layoutSearchBar,100);
                 dismissProgress();
                 adapter.notifyDataSetChanged();
                 if (!aBoolean) {
@@ -156,6 +164,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_search:
+                if(layoutSearchBar.getVisibility()==View.VISIBLE){
+                    hideSearchBar(layoutSearchBar,150);
+                }else{
+                    showSearchBar(layoutSearchBar,150);
+                };
+                break;
             case R.id.action_import_data:
                 checkDatabase();
                 break;
@@ -230,6 +245,52 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void showSearchBar(final View view,long duration){
+        ObjectAnimator animTranslate = ObjectAnimator.ofFloat(view, "translationY", -view.getHeight(),0);
+        animTranslate.setDuration(duration);
+        animTranslate.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                layoutSearchBar.setVisibility(View.VISIBLE);
+            }
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+            }
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+        });
+        animTranslate.start();
+    }
+
+    private void hideSearchBar(final View view,long duration){
+        ObjectAnimator anim = ObjectAnimator.ofFloat(view, "translationY", 0,-view.getHeight());
+        anim.setDuration(duration);
+        anim.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                view.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+        });
+        anim.start();
+    }
+
     /**
      *
      */
@@ -268,13 +329,15 @@ public class MainActivity extends AppCompatActivity {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             ElectricParts parts = resultsList.get(position);
-            viewHolder.materialNum.setText("物  料  号：" + parts.getMaterial_num());
-            viewHolder.materialDesc.setText("物料描述：" + parts.getDescription());
+            String materialNokeyword = "<font color=\"#E34242\">"+materialNum.getText().toString().toUpperCase() + "</font>";
+            String materialDesckeyword = "<font color=\"#E34242\">"+desc.getText().toString().toUpperCase()+ "</font>";
+            viewHolder.materialNum.setText(Html.fromHtml("物     料     号：" + parts.getMaterial_num().replace(materialNum.getText().toString().toUpperCase(),materialNokeyword)));
+            viewHolder.materialDesc.setText(Html.fromHtml("物料描述：" + parts.getDescription().replace(desc.getText().toString().toUpperCase(),materialDesckeyword)));
             viewHolder.stockProperties.setText("库存属性：" + parts.getStock_properties());
-            viewHolder.taxPrice.setText(Html.fromHtml("含税价格：<font color=\"#E34242\">" + parts.getTax_price() + "</font>"));
-            viewHolder.pcs.setText("装箱数：" + parts.getPcs());
-            viewHolder.primaryPrice.setText(Html.fromHtml("调整前价格：<font color=\"#E34242\">" + parts.getPrimary_price() + "</font>"));
-            viewHolder.adjustPrice.setText(Html.fromHtml("调整后价格：<font color=\"#E34242\">" + parts.getAdjust_price() + "</font>"));
+            viewHolder.taxPrice.setText(Html.fromHtml("含税价格：<font color=\"#4ea6ed\">" + parts.getTax_price() + "</font>"));
+            viewHolder.pcs.setText(Html.fromHtml("装箱数：<font color=\"#4ea6ed\">" + parts.getPcs()+ "</font>"));
+            viewHolder.primaryPrice.setText(Html.fromHtml("调整前价格：<font color=\"#4ea6ed\">" + parts.getPrimary_price() + "</font>"));
+            viewHolder.adjustPrice.setText(Html.fromHtml("调整后价格：<font color=\"#4ea6ed\">" + parts.getAdjust_price() + "</font>"));
             return convertView;
         }
     }
@@ -283,4 +346,12 @@ public class MainActivity extends AppCompatActivity {
         TextView materialNum, materialDesc, stockProperties, taxPrice, pcs, primaryPrice, adjustPrice;
     }
 
+    @Override
+    public void onBackPressed() {
+        if(layoutSearchBar.getVisibility()==View.VISIBLE){
+            hideSearchBar(layoutSearchBar,150);
+            return;
+        }
+        super.onBackPressed();
+    }
 }

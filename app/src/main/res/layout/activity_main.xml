@@ -13,59 +13,64 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        android:theme="@style/AppTheme.ToolbarOverlay"
         app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:theme="@style/AppTheme.ToolbarOverlay"
         app:titleTextColor="#ffffff" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#55efefef"
-        android:orientation="vertical"
-        android:padding="5dp">
-
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/topbar_logo"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/material_num"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/search_bg"
-            android:hint="物料号"
-            android:imeOptions="actionSearch" />
-
-        <EditText
-            android:id="@+id/material_desc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/search_bg"
-            android:hint="物料描述"
-            android:imeOptions="actionSearch" />
-
-        <Button
-            android:id="@+id/btn_search"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="38dp"
-            android:background="@drawable/btn_search_selector"
-            android:text="搜索"
-            android:textColor="@color/color_white" />
+        android:background="#55efefef">
 
         <ListView
             android:id="@+id/search_result_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
             android:divider="@color/color_transparent"
-            android:dividerHeight="10dp" />
-    </LinearLayout>
+            android:dividerHeight="10dp"
+            android:padding="5dp" />
+
+        <LinearLayout
+            android:id="@+id/layout_search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <EditText
+                android:id="@+id/material_num"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/search_bg"
+                android:hint="物料号"
+                android:imeOptions="actionSearch"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/material_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/search_bg"
+                android:hint="物料描述"
+                android:imeOptions="actionSearch"
+                android:textColor="#000000" />
+
+            <Button
+                android:id="@+id/btn_search"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/btn_search_selector"
+                android:text="搜索"
+                android:textColor="@color/color_white"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+    </RelativeLayout>
 
 
 </LinearLayout>

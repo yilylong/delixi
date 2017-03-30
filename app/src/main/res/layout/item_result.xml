@@ -11,23 +11,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:singleLine="true"
-        android:text="物料号：" />
+        android:maxLines="2"
+        android:text="物料号："
+        android:textColor="#333333"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/item_material_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:singleLine="true"
-        android:text="物料描述：" />
+        android:maxLines="3"
+        android:text="物料描述："
+        android:textColor="#333333"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/item_stock_properties"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="库存属性：" />
+        android:text="库存属性："
+        android:textColor="#333333"
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,14 +46,18 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="含税价格：" />
+            android:text="含税价格："
+            android:textColor="#333333"
+            android:textSize="16sp" />
 
         <TextView
-            android:layout_width="0dp"
             android:id="@+id/item_pcs"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="装箱数：" />
+            android:text="装箱数："
+            android:textColor="#333333"
+            android:textSize="16sp" />
     </LinearLayout>
 
 
@@ -62,14 +72,18 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="调整前价格：" />
+            android:text="调整前价格："
+            android:textColor="#333333"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/item_adjust_price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="调整后价格：" />
+            android:text="调整后价格："
+            android:textColor="#333333"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
