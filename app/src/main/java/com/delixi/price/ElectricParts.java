@@ -9,6 +9,7 @@ public class ElectricParts {
     private String material_num;
     private String description;
     private String stock_properties;
+    private String category;
     private float tax_price;
     private float pcs;
     private float primary_price;
@@ -76,5 +77,13 @@ public class ElectricParts {
 
     public void setAdjust_price(float adjust_price) {
         this.adjust_price = adjust_price;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

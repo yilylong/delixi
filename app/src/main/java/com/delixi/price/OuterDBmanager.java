@@ -172,6 +172,7 @@ public class OuterDBmanager {
 				ElectricParts parts = new ElectricParts();
 				parts.setMaterial_num(cursor.getString(cursor.getColumnIndex("material_num")));
 				parts.setDescription(cursor.getString(cursor.getColumnIndex("description")));
+				parts.setCategory(cursor.getString(cursor.getColumnIndex("category")));
 				parts.setTax_price(cursor.getFloat(cursor.getColumnIndex("tax_price")));
 				parts.setPcs(cursor.getFloat(cursor.getColumnIndex("pcs")));
 				parts.setStock_properties(cursor.getString(cursor.getColumnIndex("stock_properties")));

@@ -12,8 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:titleTextColor="#ffffff"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
+        android:elevation="4dp"
+        android:theme="@style/AppTheme.ToolbarOverlay"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:titleTextColor="#ffffff" />
 
     <LinearLayout
         android:layout_width="match_parent"
