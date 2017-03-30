@@ -23,6 +23,27 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    productFlavors{
+        delixi{}
+    }
+//修改打包出来的apk名称
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            if (output.outputFile != null && output.outputFile.name.endsWith('.apk')
+                    && 'release'.equals(variant.buildType.name)) {
+                def fileName = output.outputFile.name.replace(".apk", "_${defaultConfig.versionName}_${buildTime()}.apk")
+                output.outputFile = new File(output.outputFile.parent, fileName)
+            }
+        }
+    }
+
+
+}
+def buildTime() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMdd')
+    return formattedDate
 }
 
 dependencies {
