@@ -4,10 +4,13 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -17,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -109,6 +113,39 @@ public class MainActivity extends AppCompatActivity {
                 }
                 // 开始搜索
                 searchPrice();
+            }
+        });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
+                Snackbar.make(view,"复制内容？",Snackbar.LENGTH_LONG).setAction("ok", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ElectricParts material = resultsList.get(position);
+                        StringBuilder builder = new StringBuilder();
+                        builder.append("物料号：");
+                        builder.append(material.getMaterial_num()+"\n");
+                        builder.append("物料描述：");
+                        builder.append(material.getDescription()+"\n");
+                        builder.append("归属类：");
+                        builder.append(material.getCategory()+"\n");
+                        builder.append("库存属性：");
+                        builder.append(material.getStock_properties()+"\n");
+                        builder.append("含税价格：");
+                        builder.append(material.getTax_price()+"\n");
+                        builder.append("装箱数：");
+                        builder.append(material.getPcs()+"\n");
+                        builder.append("调整前价格：");
+                        builder.append(material.getPrimary_price()+"\n");
+                        builder.append("调整后价格：");
+                        builder.append(material.getAdjust_price());
+                        ClipData clipData = ClipData.newPlainText("text",builder.toString());
+                        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                        clipboardManager.setPrimaryClip(clipData);
+                        Toast.makeText(MainActivity.this,material.getMaterial_num()+"已成功复制到剪贴板",Toast.LENGTH_SHORT).show();
+                    }
+                }).show();
+                return true;
             }
         });
     }
