@@ -19,8 +19,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="#55efefef">
+
 
         <ListView
             android:id="@+id/search_result_list"
@@ -29,6 +30,11 @@
             android:divider="@color/color_transparent"
             android:dividerHeight="10dp"
             android:padding="5dp" />
+
+        <WebView
+            android:id="@+id/webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <LinearLayout
             android:id="@+id/layout_search_bar"

@@ -7,6 +7,10 @@
         android:title="@string/action_search"
         app:showAsAction="always" />
     <item
+        android:id="@+id/action_home"
+        android:title="@string/action_home"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_import_data"
         android:title="@string/action_import_database"
         app:showAsAction="never" />

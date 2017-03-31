@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +21,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -38,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout layoutSearchBar;
     private Button button;
     private EditText materialNum, desc;
+    private WebView webView;
     private ArrayList<ElectricParts> resultsList = new ArrayList<ElectricParts>();
     private ProgressDialog progressDialog;
     private ResultsAdapter adapter;
@@ -83,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         layoutSearchBar = (LinearLayout) findViewById(R.id.layout_search_bar);
         layoutSearchBar.setVisibility(View.INVISIBLE);
         hideSearchBar(layoutSearchBar,1);
+        initWebView();
         listView = (ListView) findViewById(R.id.search_result_list);
         button = (Button) findViewById(R.id.btn_search);
         materialNum = (EditText) findViewById(R.id.material_num);
@@ -156,6 +161,41 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void initWebView() {
+        webView = (WebView) findViewById(R.id.webview);
+        webView.getSettings().setSupportZoom(true);
+        webView.getSettings().setDisplayZoomControls(false);//不显示放大缩小按钮
+        webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setUseWideViewPort(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setJavaScriptEnabled(true);
+        // 启用localStorage 和 essionStorage
+        webView.getSettings().setDomStorageEnabled(true);
+        // 开启应用程序缓存
+        webView.getSettings().setAppCacheEnabled(true);
+        String appCacheDir = this.getApplicationContext().getDir("cache", Context.MODE_PRIVATE).getPath();
+        webView.getSettings().setAppCachePath(appCacheDir);
+        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        webView.getSettings().setAppCacheMaxSize(1024 * 1024 * 10);// 设置缓冲大小，我设的是10M
+        webView.getSettings().setAllowFileAccess(true);
+        //webview中滚动拖动到顶部或者底部时的阴影
+        webView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY); //取消滚动条白边效果
+        // 启用Webdatabase数据库
+        webView.getSettings().setDatabaseEnabled(true);
+        String databaseDir = this.getApplicationContext().getDir("database", Context.MODE_PRIVATE).getPath();
+        webView.getSettings().setDatabasePath(databaseDir);// 设置数据库路径
+        // 启用地理定位
+        webView.getSettings().setGeolocationEnabled(true);
+        // 设置定位的数据库路径
+        webView.getSettings().setGeolocationDatabasePath(databaseDir);
+        // 开启插件（对flash的支持）
+        webView.getSettings().setRenderPriority(android.webkit.WebSettings.RenderPriority.HIGH);
+        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        webView.loadUrl("http://www.delixi.com/");
+
+    }
+
     private void closeIME(IBinder windowToken) {
         InputMethodManager manager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         manager.hideSoftInputFromWindow(windowToken, 0);
@@ -208,11 +248,18 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
+                if(webView.getVisibility()==View.VISIBLE){
+                    webView.setVisibility(View.GONE);
+                }
                 if(layoutSearchBar.getVisibility()==View.VISIBLE){
                     hideSearchBar(layoutSearchBar,150);
                 }else{
                     showSearchBar(layoutSearchBar,150);
                 };
+                break;
+            case R.id.action_home:
+                hideSearchBar(layoutSearchBar,150);
+                webView.setVisibility(View.VISIBLE);
                 break;
             case R.id.action_import_data:
                 checkDatabase();
@@ -393,6 +440,10 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if(layoutSearchBar.getVisibility()==View.VISIBLE){
             hideSearchBar(layoutSearchBar,150);
+            return;
+        }
+        if(webView.getVisibility()==View.VISIBLE&&webView.canGoBack()){
+            webView.goBack();
             return;
         }
         super.onBackPressed();

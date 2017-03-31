@@ -3,6 +3,7 @@
     <string name="title_activity_main2">Main2Activity</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="action_home">公司主页</string>
     <string name="action_import_database">导入数据</string>
     <string name="action_import_from_sd">从SD卡导入数据</string>
     <string name="action_about">关于</string>
