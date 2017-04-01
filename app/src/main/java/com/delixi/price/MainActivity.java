@@ -32,6 +32,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.delixi.price.util.PDFbuilder;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -122,8 +124,8 @@ public class MainActivity extends AppCompatActivity {
         });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                showTipDialog(resultsList.get(position));
             }
         });
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -160,6 +162,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void showTipDialog(final ElectricParts electricParts) {
+
+        new AlertDialog.Builder(this)
+                .setCancelable(true)
+                .setTitle("提示")
+                .setMessage("需要生成PDF吗？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        generatePDF(electricParts);
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .create().show();
+
+    }
+
+    // 生成PDF
+    private void generatePDF(ElectricParts electricParts) {
+        PDFbuilder.generatePDF(this,electricParts);
+
+    }
+
 
     private void initWebView() {
         webView = (WebView) findViewById(R.id.webview);
